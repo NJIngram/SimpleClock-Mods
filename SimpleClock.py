@@ -1,5 +1,7 @@
 import tkinter as tk
 from datetime import datetime
+import threading
+import time
 
 
 class SimpleClock(tk.Tk):
@@ -19,15 +21,20 @@ class SimpleClock(tk.Tk):
         self.date_label = tk.Label(self, font=("Ink Free", 30, "bold"))
         self.date_label.pack()
 
-        self.update_clock()
+        t = threading.Thread(target=self._clock_thread, daemon=True)
+        t.start()
         self.mainloop()
+
+    def _clock_thread(self):
+        while True:
+            self.after(0, self.update_clock)
+            time.sleep(1)
 
     def update_clock(self):
         now = datetime.now()
         self.time_label.config(text=now.strftime("%I:%M:%S %p"))
         self.day_label.config(text=now.strftime("%A"))
         self.date_label.config(text=now.strftime("%d %B, %Y"))
-        self.after(1000, self.update_clock)
 
 
 if __name__ == "__main__":
