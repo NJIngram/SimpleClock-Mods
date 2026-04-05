@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from datetime import datetime
+from datetime import datetime, timezone
 import threading
 import time
 
@@ -12,8 +12,9 @@ class SimpleClock(tk.Tk):
         self.title("Digital Clock")
         self.resizable(False, False)
         self.configure(bg="#1a1a1a", padx=20, pady=20)
-        self.geometry("440x320")
+        self.geometry("440x380")
         self.use_24hr = False
+        self.use_gmt = False
 
         self.time_label = tk.Label(
             self, font=("Impact", 48, "bold"),
@@ -57,6 +58,14 @@ class SimpleClock(tk.Tk):
         )
         self.toggle_button.pack(pady=(0, 20))
 
+        self.tz_button = ttk.Button(
+            self, text="TOGGLE GMT",
+            style="BL.TButton",
+            cursor="hand2",
+            command=self.toggle_tz
+        )
+        self.tz_button.pack(pady=(0, 20))
+
         t = threading.Thread(target=self._clock_thread, daemon=True)
         t.start()
         self.mainloop()
@@ -67,7 +76,7 @@ class SimpleClock(tk.Tk):
             time.sleep(1)
 
     def update_clock(self):
-        now = datetime.now()
+        now = datetime.now(timezone.utc) if self.use_gmt else datetime.now()
         if self.use_24hr:
             self.time_label.config(text=now.strftime("%H:%M:%S"))
         else:
@@ -78,6 +87,8 @@ class SimpleClock(tk.Tk):
     def toggle_24hr(self):
         self.use_24hr = not self.use_24hr
 
-
+    def toggle_tz(self):
+        self.use_gmt = not self.use_gmt
+        self.tz_button.config(text="TOGGLE LOCAL" if self.use_gmt else "TOGGLE GMT")
 if __name__ == "__main__":
     SimpleClock()
