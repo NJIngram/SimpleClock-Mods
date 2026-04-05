@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from datetime import datetime
 import threading
 import time
@@ -33,13 +34,25 @@ class SimpleClock(tk.Tk):
         )
         self.date_label.pack(padx=20, pady=(2, 14))
 
-        self.toggle_button = tk.Button(
-            self, text="TOGGLE 24HR",
+        style = ttk.Style()
+        style.theme_use("default")
+        style.configure("BL.TButton",
             font=("Impact", 14),
-            bg="#f5c518", fg="#1a1a1a",
-            activebackground="#ff6a00", activeforeground="#1a1a1a",
-            relief="flat", cursor="hand2",
-            padx=14, pady=4,
+            background="#f5c518",
+            foreground="#1a1a1a",
+            borderwidth=0,
+            focusthickness=0,
+            padding=(14, 4)
+        )
+        style.map("BL.TButton",
+            background=[("active", "#ff6a00")],
+            foreground=[("active", "#1a1a1a")]
+        )
+
+        self.toggle_button = ttk.Button(
+            self, text="TOGGLE 24HR",
+            style="BL.TButton",
+            cursor="hand2",
             command=self.toggle_24hr
         )
         self.toggle_button.pack(pady=(0, 20))
