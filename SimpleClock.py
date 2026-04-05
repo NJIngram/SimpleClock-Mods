@@ -10,16 +10,17 @@ class SimpleClock(tk.Tk):
 
         self.title("Digital Clock")
         self.resizable(False, False)
-        self.configure(bg="white")
+        self.configure(bg="white", padx=20, pady=20)
+        self.geometry("400x250")
 
         self.time_label = tk.Label(self, font=("Sans-Serif", 59), bg="black", fg="white")
-        self.time_label.pack()
+        self.time_label.pack(padx=20, pady=(20, 5))
 
         self.day_label = tk.Label(self, font=("Ink Free", 34, "bold"))
-        self.day_label.pack()
+        self.day_label.pack(padx=20, pady=5)
 
         self.date_label = tk.Label(self, font=("Ink Free", 30, "bold"))
-        self.date_label.pack()
+        self.date_label.pack(padx=20, pady=(5, 20))
 
         t = threading.Thread(target=self._clock_thread, daemon=True)
         t.start()
